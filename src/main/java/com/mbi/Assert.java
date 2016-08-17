@@ -1,9 +1,11 @@
 package com.mbi;
 
+import org.skyscreamer.jsonassert.JSONCompareMode;
+
 /**
  * Created by mbi on 8/17/16.
  */
-public interface Assert {
+interface Assert {
 
-    <T> void assertJsonEquals(T actual, T expected, String[] ignore, CompareMode mode);
+    <T> void doAssertion(T actual, T expected, JSONCompareMode mode);
 }
