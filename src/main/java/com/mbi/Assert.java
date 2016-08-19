@@ -1,6 +1,5 @@
 package com.mbi;
 
-import com.sun.istack.internal.Nullable;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class Assert implements IAssert {
@@ -9,11 +8,11 @@ public class Assert implements IAssert {
     private String[] ignore;
 
     public Assert() {
-        mode = JSONCompareMode.LENIENT;
+        mode = JSONCompareMode.STRICT;
         ignore = new String[]{""};
     }
 
-    public <T, U> void jsonEquals(T actual, U expected) {
+    public <T, U> void assertJsonEquals(T actual, U expected) {
         Assertion.Builder builder = new Assertion().newBuilder(mode, ignore);
 
         builder
@@ -25,14 +24,12 @@ public class Assert implements IAssert {
                 .doAssertion();
     }
 
-    @Nullable
     public Assert ignore(String[] ignore) {
         this.ignore = ignore;
 
         return this;
     }
 
-    @Nullable
     public Assert withMode(JSONCompareMode mode) {
         this.mode = mode;
 
