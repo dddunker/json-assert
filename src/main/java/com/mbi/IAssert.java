@@ -2,5 +2,5 @@ package com.mbi;
 
 interface IAssert {
 
-    void jsonEquals();
+    <T, U> void jsonEquals(T actual, U expected);
 }

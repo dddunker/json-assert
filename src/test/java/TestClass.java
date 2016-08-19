@@ -6,43 +6,38 @@ import org.testng.annotations.Test;
 
 public class TestClass {
 
+    private Assert asserter = new Assert();
+
     @Test
-    public void test() {
-//        Assert asserter = Assert.newBuilder().assertEquals();
+    public void testAssertJsonObjectJsonObject() {
         JSONObject j1 = new JSONObject("{\"q\": 1}");
         JSONObject j2 = new JSONObject("{\"q\": 1}");
-        JSONObject j3 = new JSONObject("{\"q\": 1}");
-        JSONArray jsonObject2 = new JSONArray("[{\"q\": 1}]");
-        JSONArray jsonObject1 = new JSONArray("[{\"q\": 1}]");
-        String string = "string";
-
-        Assert.Builder asserter = Assert.newBuilder();
 
         asserter
-                .ignore(new String[]{"aaa"})
-                .setMode(JSONCompareMode.LENIENT)
-                .setJsons(j1, j2)
-                .assertEquals();
-
-
-//        Account account = Account.newBuilder()
-//                .setToken("hello")
-//                .setUserId("habr")
-//                .assertEquals();
-//
-//        Account.Builder accountBuilder = Account.newBuilder();
-//
-//        accountBuilder.setToken("hello");
-//
-//        accountBuilder..setUserId("habr");
-//
-//        return accountBuilder.assertEquals();
-
-
-//        asserter.assertEquals(jsonObject1, jsonObject2, JSONCompareMode.LENIENT);
-//        asserter.assertEquals(jsonObject1, new JSONObject[]{j1, j2}, JSONCompareMode.LENIENT);
-
-
+                .ignore(new String[]{"asd"})
+                .withMode(JSONCompareMode.LENIENT)
+                .jsonEquals(j1, j2);
     }
 
+    @Test
+    public void testAssertJsonArrayJsonArray() {
+        JSONArray j1 = new JSONArray("[{\"q\": 1}]");
+        JSONArray j2 = new JSONArray("[{\"q\": 1}]");
+
+        asserter
+                .ignore(new String[]{"asd"})
+                .withMode(JSONCompareMode.LENIENT)
+                .jsonEquals(j1, j2);
+    }
+
+    @Test
+    public void testAssertWithIgnore() {
+        JSONObject j2 = new JSONObject("{\"q\": 2, \"w\":3}");
+        JSONObject j1= new JSONObject("{\"q\": 2, \"w\":3}");
+
+        asserter
+//                .ignore(new String[]{"w"})
+//                .withMode(JSONCompareMode.STRICT)
+                .jsonEquals(j1, j2);
+    }
 }

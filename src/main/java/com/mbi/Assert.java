@@ -1,53 +1,41 @@
 package com.mbi;
 
+import com.sun.istack.internal.Nullable;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class Assert {
+public class Assert implements IAssert {
 
-    private Object actual;
-    private Object expected;
-    private JSONCompareMode mode = JSONCompareMode.LENIENT;
-    private String[] ignore = {""};
+    private JSONCompareMode mode;
+    private String[] ignore;
 
-    // Private constructor
-    private Assert() {
+    public Assert() {
+        mode = JSONCompareMode.LENIENT;
+        ignore = new String[]{""};
     }
 
-    public static Builder newBuilder() {
-        return new Assert().new Builder();
+    public <T, U> void jsonEquals(T actual, U expected) {
+        Assertion.Builder builder = new Assertion().newBuilder(mode, ignore);
+
+        builder
+                .setActual(actual)
+                .setExpected(expected)
+                .setMode(mode)
+                .setIgnore(ignore)
+                .build()
+                .doAssertion();
     }
 
-    private void jsonEquals() {
-        new Assertion(this.actual, this.expected, this.mode, this.ignore);
+    @Nullable
+    public Assert ignore(String[] ignore) {
+        this.ignore = ignore;
+
+        return this;
     }
 
-    public class Builder {
+    @Nullable
+    public Assert withMode(JSONCompareMode mode) {
+        this.mode = mode;
 
-        // Private constructor
-        private Builder() {
-        }
-
-        public Builder setMode(JSONCompareMode mode) {
-            Assert.this.mode = mode;
-
-            return this;
-        }
-
-        public Builder ignore(String[] ignore) {
-            Assert.this.ignore = ignore;
-
-            return this;
-        }
-
-        public <T, U> Builder setJsons(T expected, U actual) {
-            Assert.this.expected = expected;
-            Assert.this.actual = actual;
-
-            return this;
-        }
-
-        public void assertEquals() {
-            Assert.this.jsonEquals();
-        }
+        return this;
     }
 }
