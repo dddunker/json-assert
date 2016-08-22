@@ -1,19 +1,19 @@
 package com.mbi;
 
-import org.skyscreamer.jsonassert.JSONCompareMode;
-
 public class Assert implements IAssert {
 
-    private JSONCompareMode mode;
+    private CompareMode mode;
     private String[] ignore;
 
     public Assert() {
-        mode = JSONCompareMode.STRICT;
+        // Default mode
+        mode = CompareMode.NOT_ORDERED;
+        // Default fields to ignore
         ignore = new String[]{""};
     }
 
-    public <T, U> void assertJsonEquals(T actual, U expected) {
-        Assertion.Builder builder = new Assertion().newBuilder(mode, ignore);
+    public <T, U> void jsonEquals(T expected, U actual) {
+        BuilderAssertion.Builder builder = new BuilderAssertion().newBuilder(mode, ignore);
 
         builder
                 .setActual(actual)
@@ -30,7 +30,7 @@ public class Assert implements IAssert {
         return this;
     }
 
-    public Assert withMode(JSONCompareMode mode) {
+    public Assert withMode(CompareMode mode) {
         this.mode = mode;
 
         return this;
