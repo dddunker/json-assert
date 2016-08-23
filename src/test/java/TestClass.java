@@ -1,4 +1,4 @@
-import com.mbi.Assert;
+import com.mbi.Assertion;
 import com.mbi.CompareMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,12 +14,12 @@ public class TestClass {
         JSONObject j2 = new JSONObject("{\"q\": 1}");
         JSONObject j3 = new JSONObject("{\"q\": 2}");
 
-        new Assert()
+        new Assertion()
                 .ignore(new String[]{"aaa"})
                 .jsonEquals(j1, j2);
 
         try {
-            new Assert().jsonEquals(j1, j3);
+            new Assertion().jsonEquals(j1, j3);
         } catch (AssertionError assertionError) {
             assertTrue(assertionError.getMessage().contains("Was expected"));
         }
@@ -31,10 +31,10 @@ public class TestClass {
         JSONArray j2 = new JSONArray("[{\"q\": 1}]");
         JSONArray j3 = new JSONArray("[{\"q\": 2}]");
 
-        new Assert().jsonEquals(j1, j2);
+        new Assertion().jsonEquals(j1, j2);
 
         try {
-            new Assert().jsonEquals(j1, j3);
+            new Assertion().jsonEquals(j1, j3);
         } catch (AssertionError assertionError) {
             assertTrue(assertionError.getMessage().contains("Was expected"));
         }
@@ -44,37 +44,35 @@ public class TestClass {
     public void testAssertWithIgnore() {
         JSONObject j1 = new JSONObject("{\"q\": 2, \"w\":3}");
         JSONObject j2 = new JSONObject("{\"q\": 2}");
-        JSONObject j3 = new JSONObject("{\"q\": 2}");
-        JSONObject j4 = new JSONObject("{\"q\": 2, \"w\":3}");
 
-        new Assert()
+        new Assertion()
                 .ignore(new String[]{"w"})
                 .jsonEquals(j1, j2);
 
-        new Assert()
+        new Assertion()
                 .ignore(new String[]{"w"})
-                .jsonEquals(j3, j4);
+                .jsonEquals(j2, j1);
 
         try {
-            new Assert().jsonEquals(j1, j3);
+            new Assertion().jsonEquals(j1, j2);
         } catch (AssertionError assertionError) {
             assertTrue(assertionError.getMessage().contains("Was expected"));
         }
     }
 
     @Test
-    public void testAssertWithMode() {
+    public void testAssertArraysWithMode() {
         JSONArray j1 = new JSONArray("[{\"w\": 3}, {\"q\": 2}]");
         JSONArray j4 = new JSONArray("[{\"q\": 2}, {\"w\": 3}]");
         JSONArray j3 = new JSONArray("[{\"q\": 2}, {\"w\": 3}, {\"e\":4}]");
 
 
-        new Assert()
+        new Assertion()
                 .withMode(CompareMode.NOT_ORDERED)
                 .jsonEquals(j1, j4);
 
         try {
-            new Assert()
+            new Assertion()
                     .withMode(CompareMode.ORDERED)
                     .jsonEquals(j1, j4);
         } catch (AssertionError assertionError) {
@@ -82,45 +80,45 @@ public class TestClass {
         }
 
         try {
-            new Assert()
+            new Assertion()
                     .withMode(CompareMode.NOT_ORDERED_EXTEBSIBLE_ARRAY)
                     .jsonEquals(j3, j4);
         } catch (AssertionError assertionError) {
             assertTrue(assertionError.getMessage().contains("Was expected"));
         }
 
-        new Assert()
+        new Assertion()
                 .withMode(CompareMode.NOT_ORDERED_EXTEBSIBLE_ARRAY)
                 .jsonEquals(j4, j3);
 
-
         try {
-            new Assert()
+            new Assertion()
                     .withMode(CompareMode.ORDERED_EXTENSIBLE_ARRAY)
                     .jsonEquals(j1, j3);
         } catch (AssertionError assertionError) {
             assertTrue(assertionError.getMessage().contains("Was expected"));
         }
 
-        new Assert()
+        new Assertion()
                 .withMode(CompareMode.ORDERED_EXTENSIBLE_ARRAY)
                 .jsonEquals(j4, j3);
     }
 
     @Test
-    public void testExtensibleArray() {
-        JSONArray j1 = new JSONArray("[{\"q\": 2}, {\"w\":3}]");
-        JSONArray j2 = new JSONArray("[{\"q\": 1}]");
-        JSONArray j3 = new JSONArray("[{\"q\": 2}]");
-        JSONArray j4 = new JSONArray("[{\"q\": 2, \"w\":2}]");
+    public void testAssertObjectsWithMode() {
+        JSONObject j1 = new JSONObject("{\"q\": 2, \"w\":3}");
+        JSONObject j2 = new JSONObject("{\"w\":3, \"q\": 2}");
 
-
-        new Assert()
+        new Assertion()
                 .withMode(CompareMode.NOT_ORDERED)
-                .ignore(new String[]{"a"})
-                .jsonEquals(j3, j1);
+                .jsonEquals(j1, j2);
 
-        new Assert()
-                .jsonEquals(j1, j3);
+        try {
+            new Assertion()
+                    .withMode(CompareMode.ORDERED)
+                    .jsonEquals(j1, j2);
+        } catch (AssertionError assertionError) {
+            assertTrue(assertionError.getMessage().contains("Was expected"));
+        }
     }
 }
